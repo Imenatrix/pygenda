@@ -10,8 +10,8 @@ def render(agendas):
     memail = max([len(email) for email in stremails])
 
     selection = 0
-
     while True:
+
         os.system('clear')
         for i in range(len(stragendas)):
             agenda = stragendas[i]
@@ -33,6 +33,7 @@ def render(agendas):
             ViewAgenda.render(agendas[
                 stragendas[selection]['codigo']
             ])
+            return render(agendas)
         elif key == b'\x1b[B':
             selection += 1
             if selection == len(stragendas):
