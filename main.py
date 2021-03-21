@@ -1,5 +1,6 @@
 import json
 from context import Context
+import search
 
 # carrega configurações
 with open('config.json') as file:
@@ -13,11 +14,7 @@ context = Context(
     database = config['schema']
 )
 
-codigo = int(input('Codigo: '))
-telefone = input('Telefone: ')
-context.createTelefone(codigo, telefone)
-for codigo, agenda in context.agendas.items():
-    print(f'{codigo}: {agenda.nome} > {agenda.telefones[len(agenda.telefones) - 1] if len(agenda.telefones) > 0 else ""}')
+search.render(context.agendas.values())
 
 # fecha a conexão
 context.drop()
