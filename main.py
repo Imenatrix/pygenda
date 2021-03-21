@@ -1,6 +1,6 @@
 import json
 from context import Context
-import search
+import agenda
 
 # carrega configurações
 with open('config.json') as file:
@@ -14,7 +14,7 @@ context = Context(
     database = config['schema']
 )
 
-search.render(context.agendas.values())
+agenda.render(list(context.agendas.values())[0])
 
 # fecha a conexão
 context.drop()
