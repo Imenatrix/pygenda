@@ -3,23 +3,39 @@ from getch import getch
 
 def render(agenda):
 
-    selection = 0
+    hselection = 0
+    vselection = -1
 
     while True:
         os.system('clear')
+
+        if vselection == -1:
+            print('> ', end='')
+        else:
+            print('  ', end='')
         print(f'Nome: {agenda.nome}')
         print('--------------------')
-        if selection == 0:
+        if hselection == 0:
             print('[ Emails ]  Telefones')
-        elif selection == 1:
+        elif hselection == 1:
             print('  Emails  [ Telefones ]')
         print('--------------------')
 
-        if selection == 0:
-            for email in agenda.emails:
+        if hselection == 0:
+            for i in range(len(agenda.emails)):
+                email = agenda.emails[i]
+                if i == vselection:
+                    print('> ', end='')
+                else:
+                    print('  ', end='')
                 print(email)
-        elif selection == 1:
-            for telefone in agenda.telefones:
+        elif hselection == 1:
+            for i in range(len(agenda.telefones)):
+                telefone = agenda.telefones[i]
+                if i == vselection:
+                    print('> ', end='')
+                else:
+                    print('  ', end='')
                 print(telefone)
         
         # entrada do teclado
@@ -27,13 +43,21 @@ def render(agenda):
 
         # busca por pelas setas
         if key == b'\x1b[C':
-            selection += 1
-            if selection == 2:
-                selection = 0
+            hselection += 1
+            if hselection == 2:
+                hselection = 0
+            vselection = -1
         elif key == b'\x1b[D':
-            selection -= 1
-            if selection == -1:
-                selection = 1
+            hselection -= 1
+            if hselection == -1:
+                hselection = 1
+            vselection = -1
+        elif key == b'\x1b[B':
+            if vselection < len(agenda.emails if hselection == 0 else agenda.telefones) - 1:
+                vselection += 1
+        elif key == b'\x1b[A':
+            if vselection > -1:
+                vselection -= 1
         # busca por backspace
         elif key == b'\x7f':
             return
