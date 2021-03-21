@@ -60,6 +60,7 @@ class Context:
         cursor = self.cursor
 
         cursor.execute(('insert into email(codigo, email) values (%s, %s)'), (codigo, email))
+        self.agendas[codigo].emails.append(email)
         self.connection.commit()
 
     def createTelefone(self, codigo, telefone):
@@ -67,6 +68,7 @@ class Context:
         cursor = self.cursor
 
         cursor.execute(('insert into telefone(codigo, telefone) values (%s, %s)'), (codigo, telefone))
+        self.agendas[codigo].telefones.append(telefone)
         self.connection.commit()
 
     

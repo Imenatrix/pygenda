@@ -13,7 +13,7 @@ context = Context(
     database = config['schema']
 )
 
-codigo = input('Codigo: ')
+codigo = int(input('Codigo: '))
 telefone = input('Telefone: ')
 context.createTelefone(codigo, telefone)
 for codigo, agenda in context.agendas.items():
