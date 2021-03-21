@@ -1,5 +1,16 @@
 def render(agendas):
 
+    stragendas, strnomes, stremails = generateStringLists(agendas)
+
+    mnome = max([len(nome) for nome in strnomes])
+    memail = max([len(email) for email in stremails])
+
+    for agenda in stragendas:
+        print(agenda['nome'] + (mnome - len(agenda['nome'])) * ' ', end=' | ')
+        print(agenda['email'] + (memail - len(agenda['email'])) * ' ', end=' | ')
+        print(agenda['telefone'])
+
+def generateStringLists(agendas):
     stragendas = []
     strnomes = []
     stremails = []
@@ -27,11 +38,4 @@ def render(agendas):
             'telefone' : strtelefone
         })
 
-    mnome = max([len(nome) for nome in strnomes])
-    memail = max([len(email) for email in stremails])
-
-    for agenda in stragendas:
-        print(agenda['nome'] + (mnome - len(agenda['nome'])) * ' ', end=' | ')
-        print(agenda['email'] + (memail - len(agenda['email'])) * ' ', end=' | ')
-        print(agenda['telefone'])
-    
+    return (stragendas, strnomes, stremails)
