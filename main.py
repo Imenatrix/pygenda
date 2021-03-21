@@ -13,10 +13,11 @@ context = Context(
     database = config['schema']
 )
 
-nome = input('Nome: ')
-context.createAgenda(nome)
+codigo = input('Codigo: ')
+email = input('Email: ')
+context.createEmail(codigo, email)
 for codigo, agenda in context.agendas.items():
-    print(f'{codigo}: {agenda.nome}')
+    print(f'{codigo}: {agenda.nome} > {agenda.emails[len(agenda.emails) - 1] if len(agenda.emails) > 0 else ""}')
 
 # fecha a conexão
 context.drop()

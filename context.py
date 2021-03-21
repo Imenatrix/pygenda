@@ -52,8 +52,14 @@ class Context:
 
         cursor.execute(('insert into agenda(nome) values (%s);'), (nome, ))
         codigo = cursor.lastrowid
-        print(codigo)
         self.agendas[codigo] = Agenda(codigo, nome)
+        self.connection.commit()
+
+    def createEmail(self, codigo, email):
+
+        cursor = self.cursor
+        
+        cursor.execute(('insert into email(codigo, email) values (%s, %s)'), (codigo, email))
         self.connection.commit()
     
     def drop(self):
