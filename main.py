@@ -14,7 +14,7 @@ context = Context(
     database = config['schema']
 )
 
-ViewSearch.render(context.agendas)
+ViewSearch.render(context, context.agendas)
 
 # fecha a conexão
 context.drop()

@@ -1,7 +1,7 @@
 import os
 from getch import getch
 
-def render(agenda):
+def render(context, agenda):
 
     mode = 0
     hselection = 0
@@ -62,6 +62,8 @@ def render(agenda):
                     vselection -= 1
             # busca por backspace
             elif key == b'\x7f':
+                if agenda.codigo == None:
+                    context.createAgenda(agenda.nome)
                 return
             elif key == b'\n':
                 mode = 1

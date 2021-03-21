@@ -1,18 +1,24 @@
 from getch import getch
 import os
 import ViewAgenda
+from context import Agenda
 
-def render(agendas):
+def render(context, agendas):
 
     stragendas, strnomes, stremails = generateStringLists(list(agendas.values()))
 
     mnome = max([len(nome) for nome in strnomes])
     memail = max([len(email) for email in stremails])
 
-    selection = 0
+    selection = -1
     while True:
 
         os.system('clear')
+        if selection == -1:
+            print('> ', end='')
+        else:
+            print('  ', end='')
+        print('[Novo]')
         for i in range(len(stragendas)):
             agenda = stragendas[i]
 
@@ -30,17 +36,20 @@ def render(agendas):
 
         # busca por pelas setas
         if key == b'\n':
-            ViewAgenda.render(agendas[
-                stragendas[selection]['codigo']
-            ])
-            return render(agendas)
+            if selection == -1:
+                ViewAgenda.render(context, Agenda(None, ''))
+            else:
+                ViewAgenda.render(context, agendas[
+                    stragendas[selection]['codigo']
+                ])
+            return render(context, agendas)
         elif key == b'\x1b[B':
             selection += 1
             if selection == len(stragendas):
                 selection = 0
         elif key == b'\x1b[A':
             selection -= 1
-            if selection == -1:
+            if selection == -2:
                 selection = len(stragendas) - 1
 
 # gera as strings para renderização separadamente
