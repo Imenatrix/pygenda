@@ -1,9 +1,10 @@
 from getch import getch
 import os
+import agenda as coiso
 
 def render(agendas):
 
-    stragendas, strnomes, stremails = generateStringLists(agendas)
+    stragendas, strnomes, stremails = generateStringLists(list(agendas.values()))
 
     mnome = max([len(nome) for nome in strnomes])
     memail = max([len(email) for email in stremails])
@@ -28,7 +29,11 @@ def render(agendas):
         key = handleKeyboardInput()
 
         # busca por pelas setas
-        if key == b'\x1b[B':
+        if key == b'\n':
+            coiso.render(agendas[
+                stragendas[selection]['codigo']
+            ])
+        elif key == b'\x1b[B':
             selection += 1
             if selection == len(stragendas):
                 selection = 0
@@ -63,6 +68,7 @@ def generateStringLists(agendas):
                 strtelefone += f' (+{len(agenda.telefones)})'
         
         stragendas.append({
+            'codigo' : agenda.codigo,
             'nome' : agenda.nome,
             'email' : stremail,
             'telefone' : strtelefone
