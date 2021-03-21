@@ -1,6 +1,6 @@
 from getch import getch
 import os
-import agenda as coiso
+import ViewAgenda
 
 def render(agendas):
 
@@ -30,7 +30,7 @@ def render(agendas):
 
         # busca por pelas setas
         if key == b'\n':
-            coiso.render(agendas[
+            ViewAgenda.render(agendas[
                 stragendas[selection]['codigo']
             ])
         elif key == b'\x1b[B':

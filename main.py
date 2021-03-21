@@ -1,6 +1,6 @@
 import json
 from context import Context
-import search
+import ViewSearch
 
 # carrega configurações
 with open('config.json') as file:
@@ -14,7 +14,7 @@ context = Context(
     database = config['schema']
 )
 
-search.render(context.agendas)
+ViewSearch.render(context.agendas)
 
 # fecha a conexão
 context.drop()
