@@ -7,6 +7,9 @@ def render(context, agenda):
     hselection = 0
     vselection = -2
 
+    newEmails = 0
+    newTelefones = 0
+
     while True:
         os.system('clear')
 
@@ -71,14 +74,21 @@ def render(context, agenda):
             elif key == b'\x7f':
                 if agenda.codigo == None:
                     context.createAgenda(agenda)
+                else:
+                    for i in range(newEmails):
+                        context.createEmail(agenda.codigo, agenda.emails[i])
+                    for i in range(newTelefones):
+                        context.createTelefone(agenda.codigo, agenda.telefones[i])
                 return
             elif key == b'\n':
                 if vselection == -1:
                     vselection = 0
                     if hselection == 0:
                         agenda.emails.insert(0, '')
+                        newEmails += 1
                     elif hselection == 1:
                         agenda.telefones.insert(0, '')
+                        newTelefones += 1
                 mode = 1
         elif mode == 1:
             if vselection == -2:
