@@ -1,3 +1,6 @@
+from getch import getch
+import os
+
 def render(agendas):
 
     stragendas, strnomes, stremails = generateStringLists(agendas)
@@ -5,10 +8,34 @@ def render(agendas):
     mnome = max([len(nome) for nome in strnomes])
     memail = max([len(email) for email in stremails])
 
-    for agenda in stragendas:
-        print(agenda['nome'] + (mnome - len(agenda['nome'])) * ' ', end=' | ')
-        print(agenda['email'] + (memail - len(agenda['email'])) * ' ', end=' | ')
-        print(agenda['telefone'])
+    selection = 0
+
+    while True:
+        os.system('clear')
+        for i in range(len(stragendas)):
+            agenda = stragendas[i]
+
+            if i == selection:
+                print('> ', end='')
+            else:
+                print('  ', end='')
+
+            print(agenda['nome'] + (mnome - len(agenda['nome'])) * ' ', end=' | ')
+            print(agenda['email'] + (memail - len(agenda['email'])) * ' ', end=' | ')
+            print(agenda['telefone'])
+
+        # entrada do teclado
+        key = handleKeyboardInput()
+
+        # busca por pelas setas
+        if key == b'\x1b[B':
+            selection += 1
+            if selection == len(stragendas):
+                selection = 0
+        elif key == b'\x1b[A':
+            selection -= 1
+            if selection == -1:
+                selection = len(stragendas) - 1
 
 # gera as strings para renderização separadamente
 # assim eu posso contar o tamanho de cada uma
@@ -42,3 +69,9 @@ def generateStringLists(agendas):
         })
 
     return (stragendas, strnomes, stremails)
+
+def handleKeyboardInput():
+    key = getch()
+    if bytes(key, 'utf-8') == b'\x1b':
+        key += getch() + getch()
+    return bytes(key, 'utf-8')
