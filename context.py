@@ -46,13 +46,19 @@ class Context:
 
         self.agendas = agendas
 
-    def createAgenda(self, nome):
+    def createAgenda(self, agenda):
         
         cursor = self.cursor
 
-        cursor.execute(('insert into agenda(nome) values (%s);'), (nome, ))
-        codigo = cursor.lastrowid
-        self.agendas[codigo] = Agenda(codigo, nome)
+        cursor.execute(('insert into agenda(nome) values (%s);'), (agenda.nome, ))
+        agenda.codigo = cursor.lastrowid
+        self.agendas[agenda.codigo] = agenda
+
+        for email in agenda.emails:
+            cursor.execute(('insert into email(codigo, email) values (%s, %s)'), (agenda.codigo, email))
+        for telefone in agenda.telefones:
+            cursor.execute(('insert into telefone(codigo, telefone) values (%s, %s)'), (agenda.codigo, telefone))
+
         self.connection.commit()
 
     def createEmail(self, codigo, email):

@@ -5,12 +5,12 @@ def render(context, agenda):
 
     mode = 0
     hselection = 0
-    vselection = -1
+    vselection = -2
 
     while True:
         os.system('clear')
 
-        if vselection == -1:
+        if vselection == -2:
             print('> ', end='')
         else:
             print('  ', end='')
@@ -21,6 +21,13 @@ def render(context, agenda):
         elif hselection == 1:
             print('  Emails  [ Telefones ]')
         print('--------------------')
+
+        if mode == 0:
+            if vselection == -1:
+                print('> ', end='')
+            else:
+                print('  ', end='')
+            print('[Novo]')
 
         if hselection == 0:
             for i in range(len(agenda.emails)):
@@ -48,31 +55,43 @@ def render(context, agenda):
                 hselection += 1
                 if hselection == 2:
                     hselection = 0
-                vselection = -1
+                vselection = -2
             elif key == b'\x1b[D':
                 hselection -= 1
                 if hselection == -1:
                     hselection = 1
-                vselection = -1
+                vselection = -2
             elif key == b'\x1b[B':
                 if vselection < len(agenda.emails if hselection == 0 else agenda.telefones) - 1:
                     vselection += 1
             elif key == b'\x1b[A':
-                if vselection > -1:
+                if vselection > -2:
                     vselection -= 1
             # busca por backspace
             elif key == b'\x7f':
                 if agenda.codigo == None:
-                    context.createAgenda(agenda.nome)
+                    context.createAgenda(agenda)
                 return
             elif key == b'\n':
+                if vselection == -1:
+                    vselection = 0
+                    if hselection == 0:
+                        agenda.emails.insert(0, '')
+                    elif hselection == 1:
+                        agenda.telefones.insert(0, '')
                 mode = 1
         elif mode == 1:
-            if vselection == -1:
+            if vselection == -2:
                 if key == b'\x7f':
                     agenda.nome = agenda.nome[:-1]
                 if key.decode('utf-8').isprintable():
                     agenda.nome += key.decode('utf-8')
+            elif vselection == -1:
+                vselection = 0
+                if hselection == 0:
+                    agenda.emails.insert(0, '')
+                elif hselection == 1:
+                    agenda.telefones.insert(0, '')
             else:
                 if hselection == 0:
                     if key == b'\x7f':
