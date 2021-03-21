@@ -10,6 +10,9 @@ def render(agendas):
         print(agenda['email'] + (memail - len(agenda['email'])) * ' ', end=' | ')
         print(agenda['telefone'])
 
+# gera as strings para renderização separadamente
+# assim eu posso contar o tamanho de cada uma
+# e ajustar o espaçamento da tabela dinamicamente
 def generateStringLists(agendas):
     stragendas = []
     strnomes = []
