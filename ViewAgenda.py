@@ -34,6 +34,9 @@ def render(agenda):
             selection -= 1
             if selection == -1:
                 selection = 1
+        # busca por backspace
+        elif key == b'\x7f':
+            return
 
 def handleKeyboardInput():
     key = getch()
