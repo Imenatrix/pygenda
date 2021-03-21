@@ -14,10 +14,10 @@ context = Context(
 )
 
 codigo = input('Codigo: ')
-email = input('Email: ')
-context.createEmail(codigo, email)
+telefone = input('Telefone: ')
+context.createTelefone(codigo, telefone)
 for codigo, agenda in context.agendas.items():
-    print(f'{codigo}: {agenda.nome} > {agenda.emails[len(agenda.emails) - 1] if len(agenda.emails) > 0 else ""}')
+    print(f'{codigo}: {agenda.nome} > {agenda.telefones[len(agenda.telefones) - 1] if len(agenda.telefones) > 0 else ""}')
 
 # fecha a conexão
 context.drop()

@@ -58,9 +58,17 @@ class Context:
     def createEmail(self, codigo, email):
 
         cursor = self.cursor
-        
+
         cursor.execute(('insert into email(codigo, email) values (%s, %s)'), (codigo, email))
         self.connection.commit()
+
+    def createTelefone(self, codigo, telefone):
+        
+        cursor = self.cursor
+
+        cursor.execute(('insert into telefone(codigo, telefone) values (%s, %s)'), (codigo, telefone))
+        self.connection.commit()
+
     
     def drop(self):
         self.cursor.close()
