@@ -21,14 +21,17 @@ class Context:
         self.load()
 
     def load(self):
-        self.cursor.execute(('select codigo, nome from agenda;'))
-        qagendas = [agenda for agenda in self.cursor]
 
-        self.cursor.execute(('select codigo, email from email;'))
-        qemails = [email for email in self.cursor]
+        cursor = self.cursor
 
-        self.cursor.execute(('select codigo, telefone from telefone;'))
-        qtelefones = [telefone for telefone in self.cursor]
+        cursor.execute(('select codigo, nome from agenda;'))
+        qagendas = [agenda for agenda in cursor]
+
+        cursor.execute(('select codigo, email from email;'))
+        qemails = [email for email in cursor]
+
+        cursor.execute(('select codigo, telefone from telefone;'))
+        qtelefones = [telefone for telefone in cursor]
 
         agendas = {}
 
@@ -42,6 +45,16 @@ class Context:
             agendas[codigo].telefones.append(telefone)
 
         self.agendas = agendas
+
+    def createAgenda(self, nome):
+        
+        cursor = self.cursor
+
+        cursor.execute(('insert into agenda(nome) values (%s);'), (nome, ))
+        codigo = cursor.lastrowid
+        print(codigo)
+        self.agendas[codigo] = Agenda(codigo, nome)
+        self.connection.commit()
     
     def drop(self):
         self.cursor.close()

@@ -13,6 +13,8 @@ context = Context(
     database = config['schema']
 )
 
+nome = input('Nome: ')
+context.createAgenda(nome)
 for codigo, agenda in context.agendas.items():
     print(f'{codigo}: {agenda.nome}')
 
