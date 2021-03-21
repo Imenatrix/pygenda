@@ -114,6 +114,8 @@ def render(context, agenda):
                     if key.decode('utf-8').isdigit():
                         agenda.telefones[vselection] = int(str(agenda.telefones[vselection]) + key.decode('utf-8'))
             if key == b'\n':
+                if vselection == -2:
+                    context.updateAgenda(agenda)
                 mode = 0
 
 def handleKeyboardInput():

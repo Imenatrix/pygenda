@@ -61,6 +61,14 @@ class Context:
 
         self.connection.commit()
 
+    def updateAgenda(self, agenda):
+
+        cursor = self.cursor
+
+        cursor.execute(('update agenda set nome = %s where codigo = %s'), (agenda.nome, agenda.codigo))
+        self.connection.commit()
+
+
     def createEmail(self, codigo, email):
 
         cursor = self.cursor
