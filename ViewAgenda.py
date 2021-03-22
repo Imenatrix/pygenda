@@ -13,7 +13,7 @@ def render(context, agenda):
     while True:
         os.system('clear')
 
-        print(f'<SETAS : NAVEGAR> | <ENTER : {"EDITAR" if mode == 0 else "SALVAR"}> | <DEL : REMOVER> | <BACKSPACE : VOLTAR>')
+        print(f'<SETAS : NAVEGAR> | <ENTER : {"EDITAR" if mode == 0 else "SALVAR"}> | <DEL : REMOVER> | <TAB : VOLTAR>')
 
         print()
         print(f'MODO: {"Visualização" if mode == 0 else "Edição"}')
@@ -101,7 +101,7 @@ def render(context, agenda):
                     hselection = 1
 
             # sair
-            elif key == b'\x7f':
+            elif key == b'\t':
                 return
 
             # editar

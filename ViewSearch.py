@@ -83,6 +83,10 @@ def render(context, agendas, selection = -1):
             if selection > -1:
                 selection -= 1
 
+        # sair
+        elif key == b'\t':
+                return
+
         # apaga caracter
         if key == b'\x7f':
             term = term[:-1]
