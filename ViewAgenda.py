@@ -126,10 +126,12 @@ def render(context, agenda):
                 if vselection > -1:
                     if hselection == 0:
                         context.deleteEmail(agenda.codigo, agenda.emails[vselection])
+                        if vselection >= len(agenda.emails) - 1:
+                            vselection -= 1
                     elif hselection == 1:
                         context.deleteTelefone(agenda.codigo, agenda.telefones[vselection])
-                    if vselection >= len(agenda.emails) - 1:
-                        vselection -= 1
+                        if vselection >= len(agenda.telefones) - 1:
+                            vselection -= 1
 
         # modo de edição
         elif mode == 1:
