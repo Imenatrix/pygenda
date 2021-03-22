@@ -64,10 +64,23 @@ class Context:
         self.connection.commit()
 
     def deleteAgenda(self, agenda):
+        for email in agenda.emails:
+            self.cursor.execute(
+                ('delete from email where codigo = %s and email = %s'),
+                (agenda.codigo, email)
+            )
+
+        for telefone in agenda.telefones:
+            self.cursor.execute(
+                ('delete from telefone where codigo = %s and telefone = %s'),
+                (agenda.codigo, telefone)
+            )
+
         self.cursor.execute(
             ('delete from agenda where codigo = %s'),
             (agenda.codigo, )
         )
+
         self.agendas.pop(agenda.codigo)
         self.connection.commit()
 
