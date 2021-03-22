@@ -3,14 +3,13 @@ import os
 import ViewAgenda
 from context import Agenda
 
-def render(context, agendas, selection = 0):
+def render(context, agendas, selection = -1):
 
     stragendas, strnomes, stremails = generateStringLists(list(agendas.values()))
 
     mnome = max([len(nome) for nome in strnomes])
     memail = max([len(email) for email in stremails])
 
-    selection = -1
     while True:
 
         os.system('clear')
