@@ -1,5 +1,6 @@
 from getch import getch
 import os
+import contextlib
 import ViewAgenda
 from context import Agenda
 from fuzzywuzzy import process
@@ -9,7 +10,12 @@ def render(context, agendas, selection = -1):
     term = ''
     while True:
 
-        nomes, emails, telefones = search(term, agendas.values())
+        # https://stackoverflow.com/questions/8391411/how-to-block-calls-to-print
+        # suprime stderr temporariamente
+        # se temp == '' ou outros casos especificos,
+        # fuzzywuzzy.process imprime avisos sobre otimizações
+        with open(os.devnull, "w") as f, contextlib.redirect_stderr(f):
+            nomes, emails, telefones = search(term, agendas.values())
 
         stragendas, strnomes, stremails = generateStringLists(
             sort(
