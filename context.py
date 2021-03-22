@@ -63,6 +63,13 @@ class Context:
         cursor.execute(('update agenda set nome = %s where codigo = %s'), (agenda.nome, agenda.codigo))
         self.connection.commit()
 
+    def deleteAgenda(self, agenda):
+
+        cursor = self.cursor
+
+        cursor.execure(('delete from agenda where codigo = %s'), (agenda.codigo, ))
+        self.connection.commit()
+
 
     def createEmail(self, codigo, email):
 
@@ -81,6 +88,14 @@ class Context:
         self.agendas[codigo].emails[index] = newEmail
         self.connection.commit()
 
+    def deleteEmail(self, codigo, email):
+
+        cursor = self.cursor
+
+        cursor.execute(('delete from email where codigo = %s and email = %s'), (codigo, email))
+        self.agendas[codigo].emails.remove(email)
+        self.connection.commit()
+
     def createTelefone(self, codigo, telefone):
         
         cursor = self.cursor
@@ -97,6 +112,14 @@ class Context:
         index = self.agendas[codigo].telefones.index(telefone)
         self.agendas[codigo].telefones[index] = newTelefone
         self.connection.commit()
+
+    def deleteTelefone(self, codigo, telefone):
+
+        cursor = self.cursor
+        cursor.execure(('delete from telefone where codigo = %s and telefone = %s'), (codigo, telefone))
+        self.agendas[codigo].telefones.remove(telefone)
+        self.connection.commit()
+
     
     def drop(self):
         self.cursor.close()
