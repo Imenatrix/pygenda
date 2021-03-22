@@ -47,6 +47,9 @@ def render(context, agenda):
                     print(f'{newEmail}\u2588')
                 elif hselection == 1:
                     print(f'{newTelefone}\u2588')
+            else:
+                print('  ', end='')
+                print('[Novo]')
 
         if hselection == 0:
             for i in range(len(agenda.emails)):
