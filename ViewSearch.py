@@ -28,8 +28,8 @@ def render(context, agendas, selection = -1):
             telefones,
         )
 
-        mnome = max([len(nome) for nome in strnomes])
-        memail = max([len(email) for email in stremails])
+        mnome = max([len(nome) for nome in strnomes]) if len(strnomes) != 0 else 0
+        memail = max([len(email) for email in stremails]) if len(stremails) != 0 else 0
 
         os.system('clear')
 
@@ -65,18 +65,19 @@ def render(context, agendas, selection = -1):
                 ])
             return render(context, agendas, selection)
         elif key == b'\x1b[3':
-            context.deleteAgenda(agendas[
-                stragendas[selection]['codigo']
-            ])
-            return render(context, agendas, selection)
+            if selection != -1:
+                context.deleteAgenda(agendas[
+                    stragendas[selection]['codigo']
+                ])
+                if selection >= len(stragendas) - 1:
+                    selection -= 1
+                return render(context, agendas, selection)
         elif key == b'\x1b[B':
-            selection += 1
-            if selection == len(stragendas):
-                selection = 0
+            if selection < len(stragendas) - 1:
+                selection += 1
         elif key == b'\x1b[A':
-            selection -= 1
-            if selection == -2:
-                selection = len(stragendas) - 1
+            if selection > -1:
+                selection -= 1
 
         # apaga caracter
         if key == b'\x7f':
