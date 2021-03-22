@@ -64,7 +64,7 @@ def render(context, agendas, selection = -1):
                     stragendas[selection]['codigo']
                 ])
             return render(context, agendas, selection)
-        elif key == b'\x1b[3':
+        elif key == b'\x1b[3~':
             if selection != -1:
                 context.deleteAgenda(agendas[
                     stragendas[selection]['codigo']
@@ -146,4 +146,6 @@ def handleKeyboardInput():
     key = getch()
     if bytes(key, 'utf-8') == b'\x1b':
         key += getch() + getch()
+        if bytes(key, 'utf-8') == b'\x1b[3':
+            key += getch()
     return bytes(key, 'utf-8')
