@@ -127,7 +127,7 @@ class Context:
         self.connection.commit()
 
     def deleteTelefone(self, codigo, telefone):
-        self.cursor.execure(
+        self.cursor.execute(
             ('delete from telefone where codigo = %s and telefone = %s'),
             (codigo, telefone)
         )

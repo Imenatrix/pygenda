@@ -33,8 +33,12 @@ def render(context, agendas, selection = -1):
 
         os.system('clear')
 
-        print(f'Buscar: {term}\u2588')
+        print('<SETAS : NAVEGAR> | <ENTER : SELECIONAR> | <DEL : REMOVER>')
+        print()
 
+        print(f'Digite para buscar: {term}\u2588')
+        print()
+        
         if selection == -1:
             print('> ', end='')
         else:

@@ -13,6 +13,12 @@ def render(context, agenda):
     while True:
         os.system('clear')
 
+        print(f'<SETAS : NAVEGAR> | <ENTER : {"EDITAR" if mode == 0 else "SALVAR"}> | <DEL : REMOVER> | <BACKSPACE : VOLTAR>')
+
+        print()
+        print(f'MODO: {"Visualização" if mode == 0 else "Edição"}')
+        print()
+
         if vselection == -2:
             print('> ', end='')
         else:
@@ -112,6 +118,15 @@ def render(context, agenda):
                         telefone = agenda.telefones[vselection]
                     elif vselection == -1:
                         newTelefone = ''
+
+            elif key == b'\x1b[3~':
+                if vselection > -1:
+                    if hselection == 0:
+                        context.deleteEmail(agenda.codigo, agenda.emails[vselection])
+                    elif hselection == 1:
+                        context.deleteTelefone(agenda.codigo, agenda.telefones[vselection])
+                    if vselection >= len(agenda.emails) - 1:
+                        vselection -= 1
 
         # modo de edição
         elif mode == 1:
