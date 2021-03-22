@@ -68,7 +68,7 @@ class Context:
             ('delete from agenda where codigo = %s'),
             (agenda.codigo, )
         )
-        self.agendas.remove(agenda)
+        self.agendas.pop(agenda.codigo)
         self.connection.commit()
 
     def createEmail(self, codigo, email):

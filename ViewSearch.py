@@ -3,7 +3,7 @@ import os
 import ViewAgenda
 from context import Agenda
 
-def render(context, agendas):
+def render(context, agendas, selection = 0):
 
     stragendas, strnomes, stremails = generateStringLists(list(agendas.values()))
 
@@ -42,7 +42,12 @@ def render(context, agendas):
                 ViewAgenda.render(context, agendas[
                     stragendas[selection]['codigo']
                 ])
-            return render(context, agendas)
+            return render(context, agendas, selection)
+        elif key == b'\x1b[3':
+            context.deleteAgenda(agendas[
+                stragendas[selection]['codigo']
+            ])
+            return render(context, agendas, selection)
         elif key == b'\x1b[B':
             selection += 1
             if selection == len(stragendas):
