@@ -27,7 +27,7 @@ def render(context, agendas, selection = -1):
 
         os.system('clear')
 
-        print(term)
+        print(f'Buscar: {term}\u2588')
 
         if selection == -1:
             print('> ', end='')

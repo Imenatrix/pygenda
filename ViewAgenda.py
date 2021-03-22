@@ -17,8 +17,11 @@ def render(context, agenda):
             print('> ', end='')
         else:
             print('  ', end='')
-        print(f'Nome: {agenda.nome}')
+
+        print(f'Nome: {agenda.nome}', end='')
+        print('\u2588' if mode == 1 and vselection == -2 else '')
         print('--------------------')
+
         if hselection == 0:
             print('[ Emails ]  Telefones')
         elif hselection == 1:
@@ -35,9 +38,9 @@ def render(context, agenda):
             if vselection == -1:
                 print('> ', end='')
                 if hselection == 0:
-                    print(newEmail)
+                    print(f'{newEmail}\u2588')
                 elif hselection == 1:
-                    print(newTelefone)
+                    print(f'{newTelefone}\u2588')
 
         if hselection == 0:
             for i in range(len(agenda.emails)):
@@ -47,7 +50,7 @@ def render(context, agenda):
                     if mode == 0:
                         print(email)
                     elif mode == 1:
-                        print(newEmail)
+                        print(f'{newEmail}\u2588')
                 else:
                     print('  ', end='')
                     print(email)
@@ -59,7 +62,7 @@ def render(context, agenda):
                     if mode == 0:
                         print(telefone)
                     elif mode == 1:
-                        print(newTelefone)
+                        print(f'{newTelefone}\u2588')
                 else:
                     print('  ', end='')
                     print(telefone)
