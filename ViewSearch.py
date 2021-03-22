@@ -2,17 +2,33 @@ from getch import getch
 import os
 import ViewAgenda
 from context import Agenda
+from fuzzywuzzy import process
 
 def render(context, agendas, selection = -1):
 
-    stragendas, strnomes, stremails = generateStringLists(list(agendas.values()))
-
-    mnome = max([len(nome) for nome in strnomes])
-    memail = max([len(email) for email in stremails])
-
+    term = ''
     while True:
 
+        nomes, emails, telefones = search(term, agendas.values())
+
+        stragendas, strnomes, stremails = generateStringLists(
+            sort(
+                agendas.values(),
+                nomes,
+                emails,
+                telefones
+            ),
+            emails,
+            telefones,
+        )
+
+        mnome = max([len(nome) for nome in strnomes])
+        memail = max([len(email) for email in stremails])
+
         os.system('clear')
+
+        print(term)
+
         if selection == -1:
             print('> ', end='')
         else:
@@ -56,10 +72,39 @@ def render(context, agendas, selection = -1):
             if selection == -2:
                 selection = len(stragendas) - 1
 
+        # apaga caracter
+        if key == b'\x7f':
+            term = term[:-1]
+        # adiciona caracter
+        elif key.decode('utf-8').isprintable():
+            term = term + key.decode('utf-8')
+
+def search(term, agendas):
+
+    nomes = {}
+    emails = {}
+    telefones = {}
+
+    for agenda in agendas:
+        nomes[agenda.codigo] = agenda.nome
+        emails[agenda.codigo] = process.extract(term, agenda.emails)
+        telefones[agenda.codigo] = process.extract(term, [str(telefone) for telefone in agenda.telefones])
+    
+    for score in process.extract(term, nomes):
+        nomes[score[2]] = (score[0], score[1])
+
+    return (nomes, emails, telefones)
+
+def sort(agendas, nomes, emails, telefones):
+    return sorted(agendas, reverse=True, key = lambda agenda : nomes[agenda.codigo][1] + coiso(emails[agenda.codigo]) + coiso(telefones[agenda.codigo]))
+
+def coiso(treco):
+    return treco[0][1] if len(treco) > 0 else 0
+
 # gera as strings para renderização separadamente
 # assim eu posso contar o tamanho de cada uma
 # e ajustar o espaçamento da tabela dinamicamente
-def generateStringLists(agendas):
+def generateStringLists(agendas, emails, telefones):
     stragendas = []
     strnomes = []
     stremails = []
@@ -70,14 +115,14 @@ def generateStringLists(agendas):
 
         stremail = ''
         if len(agenda.emails) > 0:
-            stremail = agenda.emails[0]
+            stremail = emails[agenda.codigo][0][0]
             if len(agenda.emails) > 1:
                 stremail += f' (+{len(agenda.emails)})'
         stremails.append(stremail)
 
         strtelefone = ''
         if len(agenda.telefones) > 0:
-            strtelefone = str(agenda.telefones[0])
+            strtelefone = telefones[agenda.codigo][0][0]
             if len(agenda.telefones) > 1:
                 strtelefone += f' (+{len(agenda.telefones)})'
         
