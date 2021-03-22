@@ -7,8 +7,8 @@ def render(context, agenda):
     hselection = 0
     vselection = -2
 
-    newEmails = 0
-    newTelefones = 0
+    newEmail = ''
+    newTelefone = ''
 
     while True:
         os.system('clear')
@@ -31,91 +31,137 @@ def render(context, agenda):
             else:
                 print('  ', end='')
             print('[Novo]')
+        elif mode == 1:
+            if vselection == -1:
+                print('> ', end='')
+                if hselection == 0:
+                    print(newEmail)
+                elif hselection == 1:
+                    print(newTelefone)
 
         if hselection == 0:
             for i in range(len(agenda.emails)):
                 email = agenda.emails[i]
                 if i == vselection:
                     print('> ', end='')
+                    if mode == 0:
+                        print(email)
+                    elif mode == 1:
+                        print(newEmail)
                 else:
                     print('  ', end='')
-                print(email)
+                    print(email)
         elif hselection == 1:
             for i in range(len(agenda.telefones)):
                 telefone = agenda.telefones[i]
                 if i == vselection:
                     print('> ', end='')
+                    if mode == 0:
+                        print(telefone)
+                    elif mode == 1:
+                        print(newTelefone)
                 else:
                     print('  ', end='')
-                print(telefone)
+                    print(telefone)
         
         # entrada do teclado
         key = handleKeyboardInput()
 
+        # modo de seleção
         if mode == 0:
-            # busca por pelas setas
-            if key == b'\x1b[C':
+            # baixo
+            if key == b'\x1b[A' and vselection > -2:
+                    vselection -= 1
+            # cima
+            elif key == b'\x1b[B' and vselection < len(agenda.emails if hselection == 0 else agenda.telefones) - 1:
+                    vselection += 1
+            # direita
+            elif key == b'\x1b[C':
                 hselection += 1
+                vselection = -2
                 if hselection == 2:
                     hselection = 0
-                vselection = -2
+            # esquerda
             elif key == b'\x1b[D':
                 hselection -= 1
+                vselection = -2
                 if hselection == -1:
                     hselection = 1
-                vselection = -2
-            elif key == b'\x1b[B':
-                if vselection < len(agenda.emails if hselection == 0 else agenda.telefones) - 1:
-                    vselection += 1
-            elif key == b'\x1b[A':
-                if vselection > -2:
-                    vselection -= 1
-            # busca por backspace
+
+            # sair
             elif key == b'\x7f':
-                if agenda.codigo == None:
-                    context.createAgenda(agenda)
-                else:
-                    for i in range(newEmails):
-                        context.createEmail(agenda.codigo, agenda.emails[i])
-                    for i in range(newTelefones):
-                        context.createTelefone(agenda.codigo, agenda.telefones[i])
                 return
+
+            # editar
             elif key == b'\n':
-                if vselection == -1:
-                    vselection = 0
-                    if hselection == 0:
-                        agenda.emails.insert(0, '')
-                        newEmails += 1
-                    elif hselection == 1:
-                        agenda.telefones.insert(0, '')
-                        newTelefones += 1
                 mode = 1
+                
+                # email
+                if hselection == 0:
+                    if vselection > -1:
+                        newEmail = agenda.emails[vselection]
+                    elif vselection == -1:
+                        newEmail = ''
+
+                # telefone
+                elif hselection == 1:
+                    if vselection > -1: # novo
+                        telefone = agenda.telefones[vselection]
+                    elif vselection == -1:
+                        newTelefone = ''
+
+        # modo de edição
         elif mode == 1:
+            # nome
             if vselection == -2:
+
+                # apaga caracter
                 if key == b'\x7f':
                     agenda.nome = agenda.nome[:-1]
-                if key.decode('utf-8').isprintable():
+                # adiciona caracter
+                elif key.decode('utf-8').isprintable():
                     agenda.nome += key.decode('utf-8')
-            elif vselection == -1:
-                vselection = 0
-                if hselection == 0:
-                    agenda.emails.insert(0, '')
-                elif hselection == 1:
-                    agenda.telefones.insert(0, '')
-            else:
-                if hselection == 0:
-                    if key == b'\x7f':
-                        agenda.emails[vselection] = agenda.emails[vselection][:-1]
-                    if key.decode('utf-8').isprintable():
-                        agenda.emails[vselection] += key.decode('utf-8')
-                elif hselection == 1:
-                    if key == b'\x7f':
-                        agenda.telefones[vselection] = int(str(agenda.telefones[vselection])[:-1])
-                    if key.decode('utf-8').isdigit():
-                        agenda.telefones[vselection] = int(str(agenda.telefones[vselection]) + key.decode('utf-8'))
+
+                # salva
+                elif key == b'\n':
+                    if agenda.codigo == None:
+                        context.createAgenda(agenda)
+                    else:
+                        context.updateAgenda(agenda)
+            # email
+            elif hselection == 0:
+
+                # apaga caracter
+                if key == b'\x7f':
+                    newEmail = newEmail[:-1]
+                #adiciona caracter
+                elif key.decode('utf-8').isprintable():
+                    newEmail += key.decode('utf-8')
+
+                # salva
+                if key == b'\n':
+                    if vselection == -1: # novo
+                        context.createEmail(agenda.codigo, newEmail)
+                    else:
+                        context.updateEmail(agenda.codigo, agenda.emails[vselection], newEmail)
+            
+            # telefone
+            elif hselection == 1:
+
+                # apaga caracter
+                if key == b'\x7f':
+                    newTelefone = newTelefone[:-1]
+                # adiciona caracter
+                elif key.decode('utf-8').isdigit():
+                    newTelefone = newTelefone + key.decode('utf-8')
+
+                # salva
+                if key == b'\n':
+                    if vselection == -1: # novo
+                        context.createTelefone(agenda.codigo, newTelefone)
+                    else:
+                        context.updateTelefone(agenda.codigo, agenda.telefones[vselection], newTelefone)
             if key == b'\n':
-                if vselection == -2:
-                    context.updateAgenda(agenda)
                 mode = 0
 
 def handleKeyboardInput():

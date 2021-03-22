@@ -54,11 +54,6 @@ class Context:
         agenda.codigo = cursor.lastrowid
         self.agendas[agenda.codigo] = agenda
 
-        for email in agenda.emails:
-            cursor.execute(('insert into email(codigo, email) values (%s, %s)'), (agenda.codigo, email))
-        for telefone in agenda.telefones:
-            cursor.execute(('insert into telefone(codigo, telefone) values (%s, %s)'), (agenda.codigo, telefone))
-
         self.connection.commit()
 
     def updateAgenda(self, agenda):
@@ -77,6 +72,15 @@ class Context:
         self.agendas[codigo].emails.append(email)
         self.connection.commit()
 
+    def updateEmail(self, codigo, email, newEmail):
+
+        cursor = self.cursor
+
+        cursor.execute(('update email set email = %s where codigo = %s and email = %s'), (newEmail, codigo, email))
+        index = self.agendas[codigo].emails.index(email)
+        self.agendas[codigo].emails[index] = newEmail
+        self.connection.commit()
+
     def createTelefone(self, codigo, telefone):
         
         cursor = self.cursor
@@ -85,6 +89,14 @@ class Context:
         self.agendas[codigo].telefones.append(telefone)
         self.connection.commit()
 
+    def updateTelefone(self, codigo, telefone, newTelefone):
+
+        cursor = self.cursor
+
+        cursor.execute(('update telefone set telefone = %s where codigo = %s and telefone = %s'), (newTelefone, codigo, telefone))
+        index = self.agendas[codigo].telefones.index(telefone)
+        self.agendas[codigo].telefones[index] = newTelefone
+        self.connection.commit()
     
     def drop(self):
         self.cursor.close()
