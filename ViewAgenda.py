@@ -80,20 +80,20 @@ def render(context, agenda):
         if mode == 0:
             # baixo
             if key == b'\x1b[A' and vselection > -2:
-                    vselection -= 1
+                vselection -= 1
             # cima
             elif key == b'\x1b[B' and vselection < len(agenda.emails if hselection == 0 else agenda.telefones) - 1:
-                    vselection += 1
+                vselection += 1
             # direita
             elif key == b'\x1b[C':
                 hselection += 1
-                vselection = -2
+                vselection = -1
                 if hselection == 2:
                     hselection = 0
             # esquerda
             elif key == b'\x1b[D':
                 hselection -= 1
-                vselection = -2
+                vselection = -1
                 if hselection == -1:
                     hselection = 1
 
